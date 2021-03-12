@@ -4,6 +4,14 @@ body {
     display: flex;
     min-height: 100vh;
     flex-direction: column;
+    color:  #45a29e;
+    background-color: #0b0c10;
+}
+select{
+    background-color: #c5c6c7;
+}
+input{
+    background-color: #c5c6c7;
 }
 header {
     height: 100px;
@@ -12,8 +20,8 @@ header {
     top: 0;
     left: 0;
     right: 0;
-    border-bottom: 1px solid #000;
-    background: #fff;
+    border-bottom: 1px solid #66fcf1;
+    background: #c5c6c7;
     
 }
 .logo {
@@ -23,28 +31,12 @@ header {
     margin-left: 1em;
 }
 
-header > nav {
-    background: #000;
-    color: #fff;
-    display: flex;
-    height: 30px;
-    position: absolute;
-    bottom: 0;
-    width: 100vw;
-    
-}
-header > nav > .item {
-    margin: 0 .5em;
-    border-right: 1px solid #fff;
-    text-align: center;
-    line-height: 30px;
-    padding: 0 1em;
-}
 .controls {
-    background: #cca;
+    background: #1f2833;
     display: flex;
     width: 100%;
     min-height: 50px;
+    
 }
 .main {
     display: flex;
@@ -56,8 +48,9 @@ header > nav > .item {
 .card {
     width: 50vw;
     min-height: 200px;
-    border: 1px #900 solid;
+    border: 1px #66fcf1 solid;
     margin: auto;
+    background-color: #1f2833;
 }
 .card > h2 {
     text-align: center;
@@ -65,14 +58,14 @@ header > nav > .item {
 .stats {
     width: 80%;
     margin: auto;
-    border: 1px solid #ccc;
+    border: 1px solid #66fcf1;
     text-align: center;
 }
 .img {
     width: 80%;
     min-height: 300px;
     background: #ccc;
-    border: 1px solid #999;
+    border: 1px solid #66fcf1;
     margin: auto;
 }
 .other {
@@ -81,5 +74,6 @@ header > nav > .item {
 }
 footer {
     display: flex;
-    border-top: 1px solid #000;
+    border-top: 1px solid #66fcf1;
+background-color: #c5c6c7;
 }
