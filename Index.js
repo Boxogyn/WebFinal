@@ -9,7 +9,7 @@ const app = express();
 
 
 // handle the middleware stuffs
-app.use('/', express.static('public'));
+app.use('/', express.static('Public'));
 
 
 
