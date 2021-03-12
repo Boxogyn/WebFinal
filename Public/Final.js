@@ -2,9 +2,14 @@
 
 const classSelector = document.getElementById('classes');
 let storedClasses = {};
+let storedRaces = {};
 
 const genders = ['M', 'F', 'None', 'Other', 'Whatever', 'All'];
 
+const randomize = (arr) =>
+{
+    return arr[Math.floor(Math.random() * arr.length)];
+}
 
 // set up the code to talk to the api
 const apiBaseRoute = 'https://www.dnd5eapi.co/api';
@@ -40,57 +45,43 @@ const resourceFetch = (resource, options) =>
 
 }
 
-// get the classes 
-function classFetcher() {
-
-	// perfect example of how to talk to the api
-    fetch(apiBaseRoute + '/classes/')
-        .then(function(response) {
-            return response.json();
-        })
-        .then(function(data) {
-            // now we need to create our options/selections
-           
-
-            // create an option for each class in our returned data
-            const classes = data.results;
-            console.log('classes: ', classes);
-            for (let i = 0; i < classes.length; i++) {
-                // define the class we are working with
-                let thisClass = classes[i];
-                // create an option element
-                let option = document.createElement('option');
-                option.value = thisClass.index;
-                option.textContent = thisClass.name;
-                // append the option i just made to the select
-                classSelector.appendChild(option);
-                
-                
-                // populate our class holder variable
-                storedClasses[thisClass.index] = thisClass.name;
-            }
-        })
-        .catch(function(err) {
-            console.log('Ooops, we could not fetch the classes');
-        });
-}
 
 // event for when they change the selected class
 function selectClass(event)
 {
-	// What is the value of the class they just selected?
-    const selectedClass = event.target.value;
-    // Get the actual text of that class
-    const text = storedClasses[selectedClass];
-    // the element that i want to change
+    const selection = event.target.value;
     const cardClass = document.getElementById('cardClass');
-    // change the text of the element to match what they selected
-    cardClass.textContent = text;
+    switch (selection)
+    {
+        case 'random':
+        {
+            // chose a random race;
+            const possilbeChoices = Object.keys(storedClasses);
+            const choice = randomize(possilbeChoices);
+            cardClass.textContent = storedClasses[choice];
+            break;
+        }
+        case 'placeholder':
+        {
+            cardClass.textContent = 'Class';
+            break;
+        }
+        default:
+        {
+            cardClass.textContent = storedClasses[selection];
+        }
+    }
     
 	
 }
-classSelector.addEventListener('change', selectClass);;
+// HERE IS THE LEVEL STUFF
+const levelSelector = (event) =>
+{
+    const choice = event.target.value;
+    const cardLevel = document.getElementById('cardLevel');
 
+    cardLevel.textContent = choice;
+}
 function levelDropdownMaker()
 {
     const select = document.createElement('select');
@@ -102,8 +93,13 @@ function levelDropdownMaker()
         temp.textContent = i;
         select.appendChild(temp);
     }
+    select.addEventListener('change', levelSelector);
     return select;
 }
+const levelSelect = document.getElementById('levelSelect');
+levelSelect.appendChild(levelDropdownMaker());
+
+// END OF THE LEVEL STUFF
 
 // this function returns an entire <div><input><etc> block to add to the control bar
 const controlMaker = (type, options) =>
@@ -121,6 +117,10 @@ const controlMaker = (type, options) =>
         case 'select':
             const select = document.createElement('select');
             let temp;
+            const placeholder = document.createElement('option');
+            placeholder.value = 'placeholder';
+            placeholder.textContent = `Select a ${options.label}`;
+            select.appendChild(placeholder);
             for (let i = 0; i < options.options.length; i++)
             {
                 console.log('looping: ', i);
@@ -140,6 +140,21 @@ const controlMaker = (type, options) =>
 
                 select.appendChild(temp);
             }
+
+            // add randomizer
+            if (options.random)
+            {
+                const random = document.createElement('option');
+                random.value = 'random';
+                random.textContent = 'Random';
+                select.appendChild(random);
+            }
+
+
+            if (options.event)
+            {
+                select.addEventListener('change', options.event);
+            }
             holder.appendChild(select);
             break;
         default:
@@ -149,15 +164,79 @@ const controlMaker = (type, options) =>
 
     return holder;
 };
+
+const genderSelect = (event) =>
+{
+    const selection = event.target.value;
+    const cardGender = document.getElementById('cardGender');
+    switch (selection)
+    {
+        case 'random':
+        {
+            // chose a random race;
+            const choice = randomize(genders);
+            cardGender.textContent = choice;
+            break;
+        }
+        case 'placeholder':
+        {
+            cardGender.textContent = 'Gender';
+            break;
+        }
+        default:
+        {
+            cardGender.textContent = selection;
+        }
+    }
+}
+
 const controls = document.getElementById('controls');
-controls.appendChild(controlMaker('select', {label: 'Gender', options: genders}));
-const levelSelect = document.getElementById('levelSelect');
-levelSelect.appendChild(levelDropdownMaker());
+controls.appendChild(controlMaker('select', {label: 'Gender', options: genders, random: true,
+event: genderSelect}));
 
-classFetcher();
 
+
+const raceSelect = (event) =>
+{
+    const selection = event.target.value;
+    const cardRace = document.getElementById('cardRace');
+    switch (selection)
+    {
+        case 'random':
+        {
+            // chose a random race;
+            const possilbeChoices = Object.keys(storedRaces);
+            const choice = randomize(possilbeChoices);
+            cardRace.textContent = storedRaces[choice];
+            break;
+        }
+        case 'placeholder':
+        {
+            cardRace.textContent = 'Race';
+            break;
+        }
+        default:
+        {
+            cardRace.textContent = storedRaces[selection];
+        }
+    }
+}
+resourceFetch('classes')
+.then((data) =>
+{
+    data.forEach((option) =>
+    {
+        storedClasses[option.index] = option.name;
+    });
+    controls.appendChild(controlMaker('select', {label: 'Class', options: data, event: selectClass, random: true}));
+});
 resourceFetch('races')
 .then((data) =>
 {
-    controls.appendChild(controlMaker('select', {label: 'Race', options: data}));
+    data.forEach((race) =>
+    {
+        storedRaces[race.index] = race.name;
+    })
+    controls.appendChild(controlMaker('select', {label: 'Race', options: data, event: raceSelect, random: true}));
 })
+
