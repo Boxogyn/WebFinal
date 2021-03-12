@@ -7,8 +7,6 @@ const app = express();
 
 app.use('/', express.static('Public'), {index: 'Index.html'});
 
-
-
 app.listen(process.env.PORT, (err) =>
 {
     if (err)
