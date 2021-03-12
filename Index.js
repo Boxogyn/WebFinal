@@ -5,7 +5,10 @@ require('dotenv').config();
 const app = express();
 
 // handle the middleware stuffs
+
 app.use('/', express.static('Public'), {index: 'Index.html'});
+
+
 
 app.listen(process.env.PORT, (err) =>
 {

@@ -1,5 +1,6 @@
 // this is all week 4 stuff
 
+
 const classSelector = document.getElementById('classes');
 let storedClasses = {};
 let storedRaces = {};
@@ -240,3 +241,13 @@ resourceFetch('races')
     controls.appendChild(controlMaker('select', {label: 'Race', options: data, event: raceSelect, random: true}));
 })
 
+const nameInput = document.getElementById("name")
+const cardName = document.getElementById("cardName")
+nameInput.addEventListener('change',function(e){
+    cardName.textContent = nameInput.value
+})
+const ageInput = document.getElementById("age")
+const cardAge = document.getElementById("cardAge")
+ageInput.addEventListener('change',function(e){
+    cardAge.textContent = ageInput.value
+})
