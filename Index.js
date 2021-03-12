@@ -2,16 +2,10 @@ const express = require('express');
 // import environment variables store in the .env file
 require('dotenv').config();
 
-const fetch = require('node-fetch');
-
-
 const app = express();
-
 
 // handle the middleware stuffs
 app.use('/', express.static('Public'));
-
-
 
 app.listen(process.env.PORT, (err) =>
 {
